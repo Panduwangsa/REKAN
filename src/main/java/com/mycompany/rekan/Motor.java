@@ -1,41 +1,24 @@
 package com.mycompany.rekan;
 
 public class Motor extends Kendaraan {
+    private String jenisTransmisi;
 
-    private int kapasitasMesin;
-
-    public Motor(String platNomor, String merek, int tahunProduksi, double tarifPerHari, int kapasitasMesin) {
-
-        super(platNomor, merek, tahunProduksi, tarifPerHari);
-
-        this.setKapasitasMesin(kapasitasMesin);
+    public Motor(String platNomor, String merk, int tahunKeluaran, int biayaSewa, String jenisTransmisi) {
+        super(platNomor, merk, tahunKeluaran, biayaSewa); 
+        this.jenisTransmisi = jenisTransmisi;
     }
 
-    public int getKapasitasMesin() {
-        return this.kapasitasMesin;
-    }
-
-    public void setKapasitasMesin(int kapasitasMesin) {
-        if (kapasitasMesin > 0) {
-            this.kapasitasMesin = kapasitasMesin;
-        } else {
-            System.out.println("Kapasitas mesin harus lebih dari 0!");
-        }
-    }
+    public String getJenisTransmisi() { return this.jenisTransmisi; }
+    public void setJenisTransmisi(String jenisTransmisi) { this.jenisTransmisi = jenisTransmisi; }
 
     @Override
     public void tampilkanInfo() {
-        System.out.printf("[MOTOR] Plat: %-11s | Merek: %-14s | Tahun: %d | Tarif: Rp%.0f/hari | Mesin: %d cc%n",
-                this.getPlatNomor(),
-                this.getMerek(),
-                this.getTahunProduksi(),
-                this.getTarifPerHari(),
-                this.kapasitasMesin);
+        System.out.printf("[Motor] Plat: %-10s | Merk: %-12s | Tahun: %d | Sewa: Rp%-7d | Transmisi: %s\n",
+            this.getPlatNomor(), this.getMerk(), this.getTahunKeluaran(), this.getBiayaSewa(), this.jenisTransmisi);
     }
 
     @Override
-    public double hitungBiaya(int hari) {
-        double biayaHelm = 10000; // sewa helm
-        return super.hitungBiaya(hari) + biayaHelm;
+    public void caraSewa() {
+        System.out.println("-> Syarat Sewa Motor: Wajib jaminan KTP asli dan memiliki SIM C.");
     }
 }
