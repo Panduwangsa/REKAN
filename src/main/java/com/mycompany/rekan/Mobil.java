@@ -1,40 +1,24 @@
 package com.mycompany.rekan;
 
 public class Mobil extends Kendaraan {
+    private int jumlahKursi;
 
-    private int jumlahPenumpang;
-
-    public Mobil(String platNomor, String merek, int tahunProduksi, double tarifPerHari,
-                 int jumlahPenumpang) {
-
-        super(platNomor, merek, tahunProduksi, tarifPerHari);
-
-        this.setJumlahPenumpang(jumlahPenumpang);
+    public Mobil(String platNomor, String merk, int tahunKeluaran, int biayaSewa, int jumlahKursi) {
+        super(platNomor, merk, tahunKeluaran, biayaSewa); 
+        this.jumlahKursi = jumlahKursi;
     }
 
-    public int getJumlahPenumpang() {
-        return this.jumlahPenumpang;
-    }
+    public int getJumlahKursi() { return this.jumlahKursi; }
+    public void setJumlahKursi(int jumlahKursi) { this.jumlahKursi = jumlahKursi; }
 
-    public void setJumlahPenumpang(int jumlahPenumpang) {
-        if (jumlahPenumpang > 0) {
-            this.jumlahPenumpang = jumlahPenumpang;
-        } else {
-            System.out.println("Jumlah penumpang harus lebih dari 0!");
-        }
-    }
-
+    @Override
     public void tampilkanInfo() {
-        System.out.printf("[MOBIL] Plat: %-11s | Merek: %-14s | Tahun: %d | Tarif: Rp%.0f/hari | Penumpang: %d%n",
-                this.getPlatNomor(),
-                this.getMerek(),
-                this.getTahunProduksi(),
-                this.getTarifPerHari(),
-                this.jumlahPenumpang);
+        System.out.printf("[Mobil] Plat: %-10s | Merk: %-12s | Tahun: %d | Sewa: Rp%-7d | Kursi: %d\n",
+            this.getPlatNomor(), this.getMerk(), this.getTahunKeluaran(), this.getBiayaSewa(), this.jumlahKursi);
     }
 
-    public double hitungBiaya(int hari) {
-        double asuransi = 0.1; // asuransi mobil 10%
-        return super.hitungBiaya(hari) + (super.hitungBiaya(hari) * asuransi);
+    @Override
+    public void caraSewa() {
+        System.out.println("-> Syarat Sewa Mobil: Wajib jaminan KTP asli, KK, dan memiliki SIM A.");
     }
 }
