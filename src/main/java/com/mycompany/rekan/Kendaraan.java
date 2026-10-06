@@ -1,77 +1,45 @@
 package com.mycompany.rekan;
 
 public class Kendaraan {
-
     private String platNomor;
-    private String merek;
-    private int tahunProduksi;
-    private double tarifPerHari;
+    private String merk;
+    private int tahunKeluaran;
+    private int biayaSewa; 
 
     public static int totalKendaraanBerhasilDibuat = 0;
 
-    public Kendaraan(String platNomor, String merek, int tahunProduksi, double tarifPerHari) {
-        this.setPlatNomor(platNomor);
-        this.setMerek(merek);
-        this.setTahunProduksi(tahunProduksi);
-        this.setTarifPerHari(tarifPerHari);
-
+    public Kendaraan(String platNomor, String merk, int tahunKeluaran, int biayaSewa) {
+        this.platNomor = platNomor;
+        this.merk = merk;
+        this.tahunKeluaran = tahunKeluaran;
+        this.biayaSewa = biayaSewa;
         totalKendaraanBerhasilDibuat++;
     }
 
-    public String getPlatNomor() {
-        return this.platNomor;
-    }
+    public String getPlatNomor() { return this.platNomor; }
+    public void setPlatNomor(String platNomor) { this.platNomor = platNomor; }
 
-    public void setPlatNomor(String platNomor) {
-        if (platNomor != null && !platNomor.isEmpty()) {
-            this.platNomor = platNomor;
+    public String getMerk() { return this.merk; }
+    public void setMerk(String merk) { this.merk = merk; }
+
+    public int getTahunKeluaran() { return this.tahunKeluaran; }
+    public void setTahunKeluaran(int tahunKeluaran) {
+        if(tahunKeluaran > 2000) {
+            this.tahunKeluaran = tahunKeluaran;
         } else {
-            System.out.println("Plat nomor tidak boleh kosong!");
+            System.out.println("Tahun keluaran terlalu tua untuk disewakan!");
         }
     }
 
-    public String getMerek() {
-        return this.merek;
-    }
-
-    public void setMerek(String merek) {
-        if (merek != null && !merek.isEmpty()) {
-            this.merek = merek;
-        } else {
-            System.out.println("Merek tidak boleh kosong!");
-        }
-    }
-
-    public int getTahunProduksi() {
-        return this.tahunProduksi;
-    }
-
-    public void setTahunProduksi(int tahunProduksi) {
-        if (tahunProduksi > 1990) {
-            this.tahunProduksi = tahunProduksi;
-        } else {
-            System.out.println("Tahun produksi harus lebih dari 1990!");
-        }
-    }
-
-    public double getTarifPerHari() {
-        return this.tarifPerHari;
-    }
-
-    public void setTarifPerHari(double tarifPerHari) {
-        if (tarifPerHari > 0) {
-            this.tarifPerHari = tarifPerHari;
-        } else {
-            System.out.println("Tarif per hari harus lebih dari 0!");
-        }
-    }
+    public int getBiayaSewa() { return this.biayaSewa; }
+    public void setBiayaSewa(int biayaSewa) { this.biayaSewa = biayaSewa; }
 
     public void tampilkanInfo() {
-        System.out.printf("[KENDARAAN] Plat: %-11s | Merek: %-14s | Tahun: %d | Tarif: Rp%.0f/hari%n",
-                this.platNomor, this.merek, this.tahunProduksi, this.tarifPerHari);
+        System.out.printf("Plat: %-10s | Merk: %-15s | Tahun: %d | Sewa: Rp%d/hari\n", 
+                          this.platNomor, this.merk, this.tahunKeluaran, this.biayaSewa);
     }
 
-    public double hitungBiaya(int hari) {
-        return this.tarifPerHari * hari;
+    public void caraSewa() {
+        System.out.println("-> Syarat Sewa: Membawa KTP Asli.");
     }
 }
