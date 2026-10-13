@@ -4,7 +4,6 @@ import java.util.Scanner;
 
 public class Rekan {
     
-    // Fitur Compile-Time Polymorphism (Overloading 1)
     public static void cariKendaraan(String merk, Kendaraan[] daftarKendaraan, int jumlah) {
         System.out.println("\n--- Mencari kendaraan dengan Merk (Teks): " + merk + " ---");
         boolean ditemukan = false;
@@ -18,7 +17,6 @@ public class Rekan {
         if (!ditemukan) System.out.println("Kendaraan tidak ditemukan.");
     }
 
-    // Fitur Compile-Time Polymorphism (Overloading 2)
     public static void cariKendaraan(int tahun, Kendaraan[] daftarKendaraan, int jumlah) {
         System.out.println("\n--- Mencari kendaraan dengan Tahun (Angka): " + tahun + " ---");
         boolean ditemukan = false;
@@ -32,7 +30,6 @@ public class Rekan {
         if (!ditemukan) System.out.println("Kendaraan tidak ditemukan.");
     }
 
-    // Fitur Runtime Polymorphism / Dynamic Binding
     public static void simulasiSewa(Kendaraan k) {
         k.caraSewa(); 
     }
@@ -50,7 +47,7 @@ public class Rekan {
 
         System.out.println("==================================================");
         System.out.println("   RENTAL KENDARAAN (REKAN) - Ilmu Komputer UNILA ");
-        System.out.println("   By: Muhammad Pandu Wangsa (2517051014)         ");
+        System.out.println("   By: M Pandu Wangsa (2517051014)                ");
         System.out.println("==================================================");
 
         while (isRunning) {
@@ -58,8 +55,9 @@ public class Rekan {
             System.out.println("1. Tambah Data Kendaraan");
             System.out.println("2. Lihat Daftar Kendaraan");
             System.out.println("3. Cari Kendaraan");
-            System.out.println("4. Keluar");
-            System.out.print("Pilih Menu (1-4): ");
+            System.out.println("4. Pinjam Kendaraan");
+            System.out.println("5. Keluar");
+            System.out.print("Pilih Menu (1-5): ");
 
             int pilihan = scanner.nextInt();
             scanner.nextLine(); 
@@ -122,6 +120,22 @@ public class Rekan {
                             daftarKendaraan[i].tampilkanInfo();
                             
                             simulasiSewa(daftarKendaraan[i]); 
+                            
+                            // Pemanggilan abstract method[cite: 87, 88]
+                            daftarKendaraan[i].hitungDendaKeterlambatan(); 
+
+                            // Pengecekan instanceof untuk Interface 1[cite: 87, 88]
+                            if (daftarKendaraan[i] instanceof DapatDiservis) {
+                                DapatDiservis itemServis = (DapatDiservis) daftarKendaraan[i];
+                                itemServis.prosesServis();
+                            }
+                            
+                            // Pengecekan instanceof untuk Interface 2[cite: 87, 88]
+                            if (daftarKendaraan[i] instanceof DapatAsuransi) {
+                                DapatAsuransi itemAsuransi = (DapatAsuransi) daftarKendaraan[i];
+                                itemAsuransi.klaimAsuransi();
+                            }
+                            
                             System.out.println();
                         }
                         System.out.println("* Total Kendaraan Terdaftar: " + Kendaraan.totalKendaraanBerhasilDibuat);
@@ -155,12 +169,58 @@ public class Rekan {
                     break;
 
                 case 4:
+                    System.out.println("\n-- Fitur Pinjam Kendaraan --");
+                    if (jumlahKendaraan == 0) {
+                        System.out.println("Belum ada kendaraan yang terdaftar.");
+                        break;
+                    }
+                    
+                    System.out.println("Daftar Kendaraan:");
+                    for (int i = 0; i < jumlahKendaraan; i++) {
+                        System.out.print((i + 1) + ". ");
+                        daftarKendaraan[i].tampilkanInfo();
+                    }
+                    
+                    System.out.print("\nPilih nomor kendaraan yang ingin dipinjam: ");
+                    int noPinjam = scanner.nextInt();
+                    scanner.nextLine();
+                    
+                    int indexPinjam = noPinjam - 1;
+                    
+                    if (indexPinjam >= 0 && indexPinjam < jumlahKendaraan) {
+                        if (!daftarKendaraan[indexPinjam].getStatusDipinjam()) {
+                            System.out.print("Berapa hari durasi sewa? ");
+                            int durasi = scanner.nextInt();
+                            scanner.nextLine();
+                            
+                            int totalBiaya = daftarKendaraan[indexPinjam].getBiayaSewa() * durasi;
+                            daftarKendaraan[indexPinjam].setStatusDipinjam(true); 
+                            
+                            System.out.println("\n--- STRUK PENYEWAAN ---");
+                            System.out.println("Plat Nomor : " + daftarKendaraan[indexPinjam].getPlatNomor());
+                            System.out.println("Merk       : " + daftarKendaraan[indexPinjam].getMerk());
+                            System.out.println("Durasi     : " + durasi + " hari");
+                            System.out.println("Total Biaya: Rp" + totalBiaya);
+                            System.out.println("Status     : BERHASIL DIPINJAM");
+                            System.out.println("-----------------------");
+                            
+                        } else {
+                            System.out.println("Maaf, kendaraan tersebut sedang dipinjam oleh pelanggan lain.");
+                        }
+                    } else {
+                        System.out.println("Nomor kendaraan tidak valid.");
+                    }
+                    System.out.print("Tekan Enter untuk melanjutkan...");
+                    scanner.nextLine();
+                    break;
+
+                case 5:
                     System.out.println("Terima kasih telah menggunakan sistem REKAN!");
                     isRunning = false;
                     break;
 
                 default:
-                    System.out.println("Pilihan tidak valid. Silakan masukkan angka 1-4.");
+                    System.out.println("Pilihan tidak valid. Silakan masukkan angka 1-5.");
                     break;
             }
         }
