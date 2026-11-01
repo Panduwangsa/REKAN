@@ -1,33 +1,27 @@
 package com.mycompany.rekan;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Rekan {
     
-    public static void cariKendaraan(String merk, Kendaraan[] daftarKendaraan, int jumlah) {
-        System.out.println("\n--- Mencari kendaraan dengan Merk (Teks): " + merk + " ---");
+    public static void cariKendaraan(String merk, ArrayList<Kendaraan> daftarKendaraan) throws KendaraanTidakDitemukanException {
+        System.out.println("\n--- Hasil Pencarian Merk: " + merk + " ---");
         boolean ditemukan = false;
-        for (int i = 0; i < jumlah; i++) {
-            if (daftarKendaraan[i].getMerk().equalsIgnoreCase(merk)) {
+        
+        for (int i = 0; i < daftarKendaraan.size(); i++) {
+            if (daftarKendaraan.get(i).getMerk().equalsIgnoreCase(merk)) {
                 System.out.print("- Ditemukan: ");
-                daftarKendaraan[i].tampilkanInfo();
+                daftarKendaraan.get(i).tampilkanInfo();
                 ditemukan = true;
             }
         }
-        if (!ditemukan) System.out.println("Kendaraan tidak ditemukan.");
-    }
-
-    public static void cariKendaraan(int tahun, Kendaraan[] daftarKendaraan, int jumlah) {
-        System.out.println("\n--- Mencari kendaraan dengan Tahun (Angka): " + tahun + " ---");
-        boolean ditemukan = false;
-        for (int i = 0; i < jumlah; i++) {
-            if (daftarKendaraan[i].getTahunKeluaran() == tahun) {
-                System.out.print("- Ditemukan: ");
-                daftarKendaraan[i].tampilkanInfo();
-                ditemukan = true;
-            }
+        
+        if (!ditemukan) {
+            throw new KendaraanTidakDitemukanException("Gagal: Kendaraan dengan merk '" + merk + "' tidak terdaftar di garasi!");
         }
-        if (!ditemukan) System.out.println("Kendaraan tidak ditemukan.");
     }
 
     public static void simulasiSewa(Kendaraan k) {
@@ -37,17 +31,24 @@ public class Rekan {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         
-        Kendaraan[] daftarKendaraan = new Kendaraan[20];
-        int jumlahKendaraan = 0;
-        boolean isRunning = true;
+        ArrayList<Kendaraan> daftarKendaraan = new ArrayList<>();
+        HashMap<String, String> dataPelanggan = new HashMap<>();
+        
+        dataPelanggan.put("320111", "M Pandu Wangsa");
+        dataPelanggan.put("320222", "Mayang Sari");
+        
+        try {
+            daftarKendaraan.add(new Mobil("BE 1111 XX", "Toyota Avanza", 2022, 350000, 7));
+            daftarKendaraan.add(new Motor("BE 2222 YY", "Yamaha NMAX", 2021, 150000, "Matic"));
+            daftarKendaraan.add(new SepedaListrik("BE 3333 ZZ", "Uwinfly D8P", 2023, 50000, 800));
+        } catch (Exception e) {
+            System.out.println("Gagal memuat data awal: " + e.getMessage());
+        }
 
-        daftarKendaraan[jumlahKendaraan++] = new Mobil("BE 1111 XX", "Toyota Avanza", 2022, 350000, 7);
-        daftarKendaraan[jumlahKendaraan++] = new Motor("BE 2222 YY", "Yamaha NMAX", 2021, 150000, "Matic");
-        daftarKendaraan[jumlahKendaraan++] = new SepedaListrik("BE 3333 ZZ", "Uwinfly D8P", 2023, 50000, 800);
+        boolean isRunning = true;
 
         System.out.println("==================================================");
         System.out.println("   RENTAL KENDARAAN (REKAN) - Ilmu Komputer UNILA ");
-        System.out.println("   By: M Pandu Wangsa (2517051014)                ");
         System.out.println("==================================================");
 
         while (isRunning) {
@@ -56,172 +57,171 @@ public class Rekan {
             System.out.println("2. Lihat Daftar Kendaraan");
             System.out.println("3. Cari Kendaraan");
             System.out.println("4. Pinjam Kendaraan");
-            System.out.println("5. Keluar");
-            System.out.print("Pilih Menu (1-5): ");
+            System.out.println("5. Manajemen Pelanggan");
+            System.out.println("6. Keluar");
+            System.out.print("Pilih Menu (1-6): ");
 
-            int pilihan = scanner.nextInt();
-            scanner.nextLine(); 
+            try {
+                int pilihan = scanner.nextInt();
+                scanner.nextLine(); 
 
-            switch (pilihan) {
-                case 1:
-                    if (jumlahKendaraan < daftarKendaraan.length) {
+                switch (pilihan) {
+                    case 1:
                         System.out.println("\n-- Pilih Jenis Kendaraan --");
-                        System.out.println("1. Mobil");
-                        System.out.println("2. Motor");
-                        System.out.println("3. Sepeda Listrik");
+                        System.out.println("1. Mobil | 2. Motor | 3. Sepeda Listrik");
                         System.out.print("Pilihan (1/2/3): ");
-                        int jenis = scanner.nextInt();
-                        scanner.nextLine();
+                        int jenis = scanner.nextInt(); scanner.nextLine();
 
                         System.out.print("Masukkan Plat Nomor: ");
                         String platBaru = scanner.nextLine();
                         System.out.print("Masukkan Merk: ");
                         String merkBaru = scanner.nextLine();
-                        System.out.print("Masukkan Tahun Keluaran: ");
-                        int tahunBaru = scanner.nextInt();
-                        
+                        System.out.print("Masukkan Tahun Keluaran (Wajib > 2000): ");
+                        int tahunBaru = scanner.nextInt(); 
                         System.out.print("Masukkan Biaya Sewa per Hari (Rp): ");
-                        int biayaBaru = scanner.nextInt();
-                        scanner.nextLine();
+                        int biayaBaru = scanner.nextInt(); scanner.nextLine();
 
                         if (jenis == 1) {
                             System.out.print("Masukkan Jumlah Kursi: ");
-                            int kursi = scanner.nextInt();
-                            scanner.nextLine();
-                            daftarKendaraan[jumlahKendaraan] = new Mobil(platBaru, merkBaru, tahunBaru, biayaBaru, kursi);
+                            int kursi = scanner.nextInt(); scanner.nextLine();
+                            daftarKendaraan.add(new Mobil(platBaru, merkBaru, tahunBaru, biayaBaru, kursi));
                         } else if (jenis == 2) {
                             System.out.print("Masukkan Transmisi (Matic/Manual): ");
                             String transmisi = scanner.nextLine();
-                            daftarKendaraan[jumlahKendaraan] = new Motor(platBaru, merkBaru, tahunBaru, biayaBaru, transmisi);
+                            daftarKendaraan.add(new Motor(platBaru, merkBaru, tahunBaru, biayaBaru, transmisi));
                         } else if (jenis == 3) {
                             System.out.print("Masukkan Kapasitas Baterai (Wh): ");
-                            int baterai = scanner.nextInt();
-                            scanner.nextLine();
-                            daftarKendaraan[jumlahKendaraan] = new SepedaListrik(platBaru, merkBaru, tahunBaru, biayaBaru, baterai);
+                            int baterai = scanner.nextInt(); scanner.nextLine();
+                            daftarKendaraan.add(new SepedaListrik(platBaru, merkBaru, tahunBaru, biayaBaru, baterai));
                         } else {
-                            System.out.println("Pilihan jenis kendaraan tidak valid.");
+                            System.out.println("Pilihan tidak valid.");
                             break;
                         }
-
-                        jumlahKendaraan++;
-                        System.out.println("Sukses! Kendaraan berhasil ditambahkan ke garasi.");
-                    } else {
-                        System.out.println("Maaf, kapasitas garasi sudah penuh!");
-                    }
-                    break;
-
-                case 2:
-                    System.out.println("\n--- Daftar Kendaraan di REKAN ---");
-                    if (jumlahKendaraan == 0) {
-                        System.out.println("Belum ada kendaraan yang tersimpan.");
-                    } else {
-                        for (int i = 0; i < jumlahKendaraan; i++) {
-                            System.out.print((i + 1) + ". ");
-                            daftarKendaraan[i].tampilkanInfo();
-                            
-                            simulasiSewa(daftarKendaraan[i]); 
-                            
-                            // Pemanggilan abstract method[cite: 87, 88]
-                            daftarKendaraan[i].hitungDendaKeterlambatan(); 
-
-                            // Pengecekan instanceof untuk Interface 1[cite: 87, 88]
-                            if (daftarKendaraan[i] instanceof DapatDiservis) {
-                                DapatDiservis itemServis = (DapatDiservis) daftarKendaraan[i];
-                                itemServis.prosesServis();
-                            }
-                            
-                            // Pengecekan instanceof untuk Interface 2[cite: 87, 88]
-                            if (daftarKendaraan[i] instanceof DapatAsuransi) {
-                                DapatAsuransi itemAsuransi = (DapatAsuransi) daftarKendaraan[i];
-                                itemAsuransi.klaimAsuransi();
-                            }
-                            
-                            System.out.println();
-                        }
-                        System.out.println("* Total Kendaraan Terdaftar: " + Kendaraan.totalKendaraanBerhasilDibuat);
-                    }
-                    System.out.print("Tekan Enter untuk melanjutkan...");
-                    scanner.nextLine();
-                    break;
-
-                case 3:
-                    System.out.println("\n-- Fitur Cari Kendaraan --");
-                    System.out.println("1. Cari berdasarkan Merk (Teks)");
-                    System.out.println("2. Cari berdasarkan Tahun (Angka)");
-                    System.out.print("Pilih Mode Pencarian (1/2): ");
-                    int modeCari = scanner.nextInt();
-                    scanner.nextLine();
-
-                    if (modeCari == 1) {
-                        System.out.print("Masukkan Merk Kendaraan: ");
-                        String kataKunci = scanner.nextLine();
-                        cariKendaraan(kataKunci, daftarKendaraan, jumlahKendaraan);
-                    } else if (modeCari == 2) {
-                        System.out.print("Masukkan Tahun Keluaran: ");
-                        int angkaKunci = scanner.nextInt();
-                        scanner.nextLine();
-                        cariKendaraan(angkaKunci, daftarKendaraan, jumlahKendaraan); 
-                    } else {
-                        System.out.println("Pilihan mode cari tidak valid.");
-                    }
-                    System.out.print("Tekan Enter untuk melanjutkan...");
-                    scanner.nextLine();
-                    break;
-
-                case 4:
-                    System.out.println("\n-- Fitur Pinjam Kendaraan --");
-                    if (jumlahKendaraan == 0) {
-                        System.out.println("Belum ada kendaraan yang terdaftar.");
+                        System.out.println("Sukses! Kendaraan masuk garasi. Total: " + daftarKendaraan.size());
                         break;
-                    }
-                    
-                    System.out.println("Daftar Kendaraan:");
-                    for (int i = 0; i < jumlahKendaraan; i++) {
-                        System.out.print((i + 1) + ". ");
-                        daftarKendaraan[i].tampilkanInfo();
-                    }
-                    
-                    System.out.print("\nPilih nomor kendaraan yang ingin dipinjam: ");
-                    int noPinjam = scanner.nextInt();
-                    scanner.nextLine();
-                    
-                    int indexPinjam = noPinjam - 1;
-                    
-                    if (indexPinjam >= 0 && indexPinjam < jumlahKendaraan) {
-                        if (!daftarKendaraan[indexPinjam].getStatusDipinjam()) {
-                            System.out.print("Berapa hari durasi sewa? ");
-                            int durasi = scanner.nextInt();
-                            scanner.nextLine();
-                            
-                            int totalBiaya = daftarKendaraan[indexPinjam].getBiayaSewa() * durasi;
-                            daftarKendaraan[indexPinjam].setStatusDipinjam(true); 
-                            
-                            System.out.println("\n--- STRUK PENYEWAAN ---");
-                            System.out.println("Plat Nomor : " + daftarKendaraan[indexPinjam].getPlatNomor());
-                            System.out.println("Merk       : " + daftarKendaraan[indexPinjam].getMerk());
-                            System.out.println("Durasi     : " + durasi + " hari");
-                            System.out.println("Total Biaya: Rp" + totalBiaya);
-                            System.out.println("Status     : BERHASIL DIPINJAM");
-                            System.out.println("-----------------------");
-                            
+
+                    case 2:
+                        System.out.println("\n--- Daftar Kendaraan (ArrayList) ---");
+                        if (daftarKendaraan.isEmpty()) {
+                            System.out.println("Belum ada kendaraan yang tersimpan.");
                         } else {
-                            System.out.println("Maaf, kendaraan tersebut sedang dipinjam oleh pelanggan lain.");
+                            for (int i = 0; i < daftarKendaraan.size(); i++) {
+                                System.out.print((i + 1) + ". ");
+                                daftarKendaraan.get(i).tampilkanInfo();
+                                simulasiSewa(daftarKendaraan.get(i)); 
+                                daftarKendaraan.get(i).hitungDendaKeterlambatan(); 
+
+                                if (daftarKendaraan.get(i) instanceof DapatDiservis) {
+                                    DapatDiservis itemServis = (DapatDiservis) daftarKendaraan.get(i);
+                                    itemServis.prosesServis();
+                                }
+                                if (daftarKendaraan.get(i) instanceof DapatAsuransi) {
+                                    DapatAsuransi itemAsuransi = (DapatAsuransi) daftarKendaraan.get(i);
+                                    itemAsuransi.klaimAsuransi();
+                                }
+                                System.out.println();
+                            }
                         }
-                    } else {
-                        System.out.println("Nomor kendaraan tidak valid.");
-                    }
-                    System.out.print("Tekan Enter untuk melanjutkan...");
-                    scanner.nextLine();
-                    break;
+                        System.out.print("Tekan Enter untuk melanjutkan...");
+                        scanner.nextLine();
+                        break;
 
-                case 5:
-                    System.out.println("Terima kasih telah menggunakan sistem REKAN!");
-                    isRunning = false;
-                    break;
+                    case 3:
+                        System.out.println("\n-- Fitur Cari Kendaraan --");
+                        System.out.print("Masukkan Merk yang dicari: ");
+                        String kataKunci = scanner.nextLine();
+                        
+                        try {
+                            cariKendaraan(kataKunci, daftarKendaraan);
+                        } catch (KendaraanTidakDitemukanException e) {
+                            System.out.println("Peringatan: " + e.getMessage());
+                        } finally {
+                            System.out.println("-> Sesi pencarian selesai dieksekusi.");
+                        }
+                        break;
 
-                default:
-                    System.out.println("Pilihan tidak valid. Silakan masukkan angka 1-5.");
-                    break;
+                    case 4:
+                        System.out.println("\n-- Fitur Pinjam Kendaraan --");
+                        if (daftarKendaraan.isEmpty()) {
+                            System.out.println("Belum ada kendaraan di garasi.");
+                            break;
+                        }
+                        for (int i = 0; i < daftarKendaraan.size(); i++) {
+                            System.out.print((i + 1) + ". ");
+                            daftarKendaraan.get(i).tampilkanInfo();
+                        }
+                        
+                        System.out.print("\nPilih nomor kendaraan: ");
+                        int noPinjam = scanner.nextInt(); scanner.nextLine();
+                        int index = noPinjam - 1;
+                        
+                        if (index >= 0 && index < daftarKendaraan.size()) {
+                            if (!daftarKendaraan.get(index).getStatusDipinjam()) {
+                                System.out.print("Berapa hari durasi sewa? ");
+                                int durasi = scanner.nextInt(); scanner.nextLine();
+                                
+                                int total = daftarKendaraan.get(index).getBiayaSewa() * durasi;
+                                daftarKendaraan.get(index).setStatusDipinjam(true); 
+                                
+                                System.out.println("\n--- STRUK PENYEWAAN ---");
+                                System.out.println("Kendaraan: " + daftarKendaraan.get(index).getMerk());
+                                System.out.println("Total Biaya: Rp" + total);
+                                System.out.println("Status   : BERHASIL");
+                                
+                            } else {
+                                System.out.println("Maaf, kendaraan sedang dipinjam.");
+                            }
+                        } else {
+                            System.out.println("Nomor kendaraan tidak valid.");
+                        }
+                        break;
+
+                    case 5:
+                        System.out.println("\n-- Kelola Pelanggan (HashMap) --");
+                        System.out.println("1. Tambah Pelanggan Baru");
+                        System.out.println("2. Cari Pelanggan via NIK");
+                        System.out.println("3. Tampilkan Semua Pelanggan");
+                        System.out.print("Pilih: ");
+                        int menuPelanggan = scanner.nextInt(); scanner.nextLine();
+                        
+                        if (menuPelanggan == 1) {
+                            System.out.print("Masukkan NIK (sebagai Key): ");
+                            String nik = scanner.nextLine();
+                            System.out.print("Masukkan Nama Lengkap (sebagai Value): ");
+                            String nama = scanner.nextLine();
+                            dataPelanggan.put(nik, nama);
+                            System.out.println("Berhasil menambahkan pelanggan!");
+                        } else if (menuPelanggan == 2) {
+                            System.out.print("Masukkan NIK yang dicari: ");
+                            String searchNik = scanner.nextLine();
+                            if (dataPelanggan.containsKey(searchNik)) {
+                                System.out.println("Ditemukan! Nama: " + dataPelanggan.get(searchNik));
+                            } else {
+                                System.out.println("Pelanggan dengan NIK tersebut tidak terdaftar.");
+                            }
+                        } else if (menuPelanggan == 3) {
+                            System.out.println("Total Pelanggan Terdaftar: " + dataPelanggan.size());
+                            for (String keyNik : dataPelanggan.keySet()) {
+                                System.out.println("- NIK: " + keyNik + " | Nama: " + dataPelanggan.get(keyNik));
+                            }
+                        }
+                        break;
+
+                    case 6:
+                        System.out.println("Terima kasih telah menggunakan sistem REKAN!");
+                        isRunning = false;
+                        break;
+
+                    default:
+                        System.out.println("Pilihan tidak valid.");
+                        break;
+                }
+            
+            } catch (InputMismatchException e) {
+                System.out.println("\n[ERROR INPUT] Format salah! Anda memasukkan teks/huruf saat sistem meminta angka.");
+                scanner.nextLine(); 
+            } catch (Exception e) {
+                System.out.println("\n[ERROR SISTEM] Terjadi kegagalan: " + e.getMessage());
             }
         }
         scanner.close();

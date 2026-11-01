@@ -3,7 +3,7 @@ package com.mycompany.rekan;
 public class Mobil extends Kendaraan implements DapatDiservis, DapatAsuransi {
     private int jumlahKursi;
 
-    public Mobil(String platNomor, String merk, int tahunKeluaran, int biayaSewa, int jumlahKursi) {
+    public Mobil(String platNomor, String merk, int tahunKeluaran, int biayaSewa, int jumlahKursi) throws Exception {
         super(platNomor, merk, tahunKeluaran, biayaSewa); 
         this.jumlahKursi = jumlahKursi;
     }
@@ -19,25 +19,14 @@ public class Mobil extends Kendaraan implements DapatDiservis, DapatAsuransi {
     }
 
     @Override
-    public void caraSewa() {
-        System.out.println("-> Syarat Sewa Mobil: Wajib jaminan KTP asli, KK, dan memiliki SIM A.");
-    }
+    public void caraSewa() { System.out.println("-> Syarat Sewa Mobil: Wajib jaminan KTP, KK, dan SIM A."); }
 
-    // Overriding abstract method dari superclass[cite: 77, 88]
     @Override
-    public void hitungDendaKeterlambatan() {
-        System.out.println("-> Denda Mobil: Rp 50.000 / hari keterlambatan.");
-    }
+    public void hitungDendaKeterlambatan() { System.out.println("-> Denda Mobil: Rp 50.000 / hari keterlambatan."); }
 
-    // Overriding method dari interface DapatDiservis[cite: 79, 88]
     @Override
-    public void prosesServis() {
-        System.out.println("-> PROSES: Mobil masuk bengkel untuk ganti oli dan cek mesin.");
-    }
+    public void prosesServis() { System.out.println("-> PROSES: Mobil masuk bengkel ganti oli."); }
 
-    // Overriding method dari interface DapatAsuransi[cite: 79, 88]
     @Override
-    public void klaimAsuransi() {
-        System.out.println("-> ASURANSI: Asuransi All-Risk mobil aktif dicover 100%.");
-    }
+    public void klaimAsuransi() { System.out.println("-> ASURANSI: Asuransi All-Risk mobil aktif."); }
 }

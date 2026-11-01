@@ -3,7 +3,7 @@ package com.mycompany.rekan;
 public class Motor extends Kendaraan implements DapatDiservis {
     private String jenisTransmisi;
 
-    public Motor(String platNomor, String merk, int tahunKeluaran, int biayaSewa, String jenisTransmisi) {
+    public Motor(String platNomor, String merk, int tahunKeluaran, int biayaSewa, String jenisTransmisi) throws Exception {
         super(platNomor, merk, tahunKeluaran, biayaSewa); 
         this.jenisTransmisi = jenisTransmisi;
     }
@@ -19,17 +19,11 @@ public class Motor extends Kendaraan implements DapatDiservis {
     }
 
     @Override
-    public void caraSewa() {
-        System.out.println("-> Syarat Sewa Motor: Wajib jaminan KTP asli dan memiliki SIM C.");
-    }
+    public void caraSewa() { System.out.println("-> Syarat Sewa Motor: Wajib jaminan KTP dan SIM C."); }
 
     @Override
-    public void hitungDendaKeterlambatan() {
-        System.out.println("-> Denda Motor: Rp 20.000 / hari keterlambatan.");
-    }
+    public void hitungDendaKeterlambatan() { System.out.println("-> Denda Motor: Rp 20.000 / hari keterlambatan."); }
 
     @Override
-    public void prosesServis() {
-        System.out.println("-> PROSES: Motor masuk bengkel untuk ganti kampas rem.");
-    }
+    public void prosesServis() { System.out.println("-> PROSES: Motor masuk bengkel ganti kampas rem."); }
 }

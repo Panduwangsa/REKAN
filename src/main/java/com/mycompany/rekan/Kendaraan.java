@@ -9,7 +9,10 @@ public abstract class Kendaraan {
 
     public static int totalKendaraanBerhasilDibuat = 0;
 
-    public Kendaraan(String platNomor, String merk, int tahunKeluaran, int biayaSewa) {
+    public Kendaraan(String platNomor, String merk, int tahunKeluaran, int biayaSewa) throws Exception {
+        if (tahunKeluaran < 2000) {
+            throw new Exception("Tahun keluaran tidak valid (harus di atas tahun 2000).");
+        }
         this.platNomor = platNomor;
         this.merk = merk;
         this.tahunKeluaran = tahunKeluaran;
@@ -25,13 +28,7 @@ public abstract class Kendaraan {
     public void setMerk(String merk) { this.merk = merk; }
 
     public int getTahunKeluaran() { return this.tahunKeluaran; }
-    public void setTahunKeluaran(int tahunKeluaran) {
-        if(tahunKeluaran > 2000) {
-            this.tahunKeluaran = tahunKeluaran;
-        } else {
-            System.out.println("Tahun keluaran terlalu tua untuk disewakan!");
-        }
-    }
+    public void setTahunKeluaran(int tahunKeluaran) { this.tahunKeluaran = tahunKeluaran; }
 
     public int getBiayaSewa() { return this.biayaSewa; }
     public void setBiayaSewa(int biayaSewa) { this.biayaSewa = biayaSewa; }
@@ -49,23 +46,5 @@ public abstract class Kendaraan {
         System.out.println("-> Syarat Sewa: Membawa KTP Asli.");
     }
 
-    // Abstract method baru (tanpa tubuh/logika)[cite: 77, 85]
     public abstract void hitungDendaKeterlambatan();
-
-    public double hitungBiaya(int lamaHari, double diskonPersen) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    } // <--- TAMBAHIN KURUNG KURAWAL INI DI BARIS 57
-
-    public double hitungDenda(int hariTerlambat) {
-        return 50000 * hariTerlambat;
-    }
-
-    public void setTersedia(boolean b) {
-        this.statusDipinjam = !b;
-    }
-
-    public static String rupiah(int nominal) {
-        return String.format("Rp%,d", nominal).replace(',', '.');
-    }
-
-}
+}   

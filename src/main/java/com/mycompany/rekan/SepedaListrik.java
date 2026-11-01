@@ -4,12 +4,10 @@ package com.mycompany.rekan;
 
 import com.mycompany.rekan.Kendaraan;
 
-// Biarkan baris package di sini
-
 public class SepedaListrik extends Kendaraan {
     private int kapasitasBaterai; 
 
-    public SepedaListrik(String platNomor, String merk, int tahunKeluaran, int biayaSewa, int kapasitasBaterai) {
+    public SepedaListrik(String platNomor, String merk, int tahunKeluaran, int biayaSewa, int kapasitasBaterai) throws Exception {
         super(platNomor, merk, tahunKeluaran, biayaSewa);
         this.kapasitasBaterai = kapasitasBaterai;
     }
@@ -25,12 +23,8 @@ public class SepedaListrik extends Kendaraan {
     }
 
     @Override
-    public void caraSewa() {
-        System.out.println("-> Syarat Sewa Sepeda Listrik: Wajib jaminan Kartu Pelajar/KTM dan KTP asli.");
-    }
+    public void caraSewa() { System.out.println("-> Syarat Sewa Sepeda Listrik: Jaminan Kartu Pelajar dan KTP."); }
 
     @Override
-    public void hitungDendaKeterlambatan() {
-        System.out.println("-> Denda Sepeda Listrik: Rp 10.000 / hari keterlambatan.");
-    }
+    public void hitungDendaKeterlambatan() { System.out.println("-> Denda Sepeda Listrik: Rp 10.000 / hari."); }
 }
