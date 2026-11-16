@@ -10,15 +10,17 @@ public class Rekan {
         SistemRental sistemRekan = new SistemRental("Sistem REKAN Unila");
         sistemRekan.bukaSistem();
         
-        sistemRekan.tambahPelanggan(new Pelanggan("320111", "M Pandu Wangsa"));
-        sistemRekan.tambahPelanggan(new Pelanggan("320222", "Mayang Sari"));
-        
-        try {
-            sistemRekan.tambahKendaraan(new Mobil("BE 1111 XX", "Toyota Avanza", 2022, 350000, 7));
-            sistemRekan.tambahKendaraan(new Motor("BE 2222 YY", "Yamaha NMAX", 2021, 150000, "Matic"));
-            sistemRekan.tambahKendaraan(new SepedaListrik("BE 3333 ZZ", "Uwinfly D8P", 2023, 50000, 800));
-        } catch (Exception e) {
-            System.out.println("Gagal memuat data awal.");
+        if (!sistemRekan.muatDataDariFile()) {
+            sistemRekan.tambahPelanggan(new Pelanggan("320111", "M Pandu Wangsa"));
+            sistemRekan.tambahPelanggan(new Pelanggan("320222", "Radiansyah"));
+            
+            try {
+                sistemRekan.tambahKendaraan(new Mobil("BE 1111 XX", "Toyota Avanza", 2022, 350000, 7));
+                sistemRekan.tambahKendaraan(new Motor("BE 2222 YY", "Yamaha NMAX", 2021, 150000, "Matic"));
+                sistemRekan.tambahKendaraan(new SepedaListrik("BE 3333 ZZ", "Uwinfly D8P", 2023, 50000, 800));
+            } catch (Exception e) {
+                System.out.println("Gagal memuat data awal.");
+            }
         }
 
         boolean isRunning = true;
@@ -30,8 +32,9 @@ public class Rekan {
             System.out.println("3. Cari Kendaraan");
             System.out.println("4. Kelola Pelanggan");
             System.out.println("5. Peminjaman Sewa");
-            System.out.println("6. Keluar");
-            System.out.print("Pilih Menu (1-6): ");
+            System.out.println("6. Baca Log Transaksi");
+            System.out.println("7. Simpan & Keluar");
+            System.out.print("Pilih Menu (1-7): ");
 
             try {
                 int pilihan = scanner.nextInt(); scanner.nextLine(); 
@@ -93,7 +96,7 @@ public class Rekan {
                         break;
 
                     case 5:
-                        System.out.println("\n-- Sistem Peminjaman (Association) --");
+                        System.out.println("\n-- Sistem Peminjaman --");
                         System.out.print("Masukkan NIK Pelanggan: ");
                         Pelanggan p = sistemRekan.getPelanggan(scanner.nextLine());
                         
@@ -122,6 +125,12 @@ public class Rekan {
                         break;
 
                     case 6:
+                        sistemRekan.bacaLogTransaksi();
+                        break;
+
+                    case 7:
+                        System.out.println("Menyimpan sesi ke penyimpanan internal...");
+                        sistemRekan.simpanDataKeFile();
                         System.out.println("Terima kasih telah menggunakan sistem REKAN!");
                         isRunning = false;
                         break;
